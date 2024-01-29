@@ -40,7 +40,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Future<void> fetchProducts() async {
     try {
       final response = await http.get(
-          Uri.parse("http://192.168.247.1:8080/aserver/api.php"));
+          Uri.parse("http://192.168.10.104:8080/aserver/api.php"));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         setState(() {
@@ -169,7 +169,10 @@ class ProductDetailScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
             ),
           ),
-          Image.network(product.search_image)
+          Image.network(product.search_image,
+            width: 500,
+            height: 500,
+            fit: BoxFit.cover)
         ],
       ),
     );
