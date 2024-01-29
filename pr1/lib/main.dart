@@ -40,7 +40,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Future<void> fetchProducts() async {
     try {
       final response = await http.get(
-          Uri.parse("http://192.168.10.104:8080/aserver/api.php"));
+          Uri.parse("http://192.168.247.1:8080/aserver/api.php"));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         setState(() {
@@ -114,6 +114,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 height: 50,
                 fit: BoxFit.cover,
               ),
+              onTap: (){//click vao item
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context)=> ProductDetailScreen(products[index]),
+                  ),
+                );
+              },
             );
           })
       :Center(
@@ -123,6 +129,65 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 }
 
+//dinh nghia lop san pham
+class ProductDetailScreen extends StatelessWidget {
+  final Product product;
+  ProductDetailScreen(this.product);
+//giao dien
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Product Detail'),
+        actions: [
+          ElevatedButton(onPressed: (){
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context)=> CardScreen()),);
+            },
+        child: Icon(Icons.shopping_cart),
+    style: ElevatedButton.styleFrom(
+      shape: CircleBorder(),
+      padding: EdgeInsets.all(0)
+      ),
+      ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: const EdgeInsets.all(8),
+          child: Text('Brand: ${product.brands_filter_facet}'),
+          ),
+          Padding(padding: const EdgeInsets.all(8),
+            child: Text('Price: ${product.price}'),
+          ),
+          Padding(padding: const EdgeInsets.all(8),
+            child: Text('ID: ${product.styleid}'),
+          ),
+          Padding(padding: const EdgeInsets.all(8),
+            child: Text('Infor: ${product.product_additional_info}',
+              style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+            ),
+          ),
+          Image.network(product.search_image)
+        ],
+      ),
+    );
+  }
+
+}
+class CardScreen extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("shopping Cart"),),
+      body: Center(
+        child: Text('Gio hang cua ban'),
+      ),
+    );
+  }
+
+}
 
 void main() {
   runApp(const MyApp());
